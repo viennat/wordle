@@ -14,28 +14,32 @@ counter = 6
 starting_blanks= ['_','_','_','_','_']
 end = True
 
-if counter == 0 :
-    print("You have run out of guesses. The word is " + mystery_word)
-    end = False
-    counter = 6
+
     
 while end is True : 
-    while counter > 0:
+    if counter > 0:
         print ("\n The word so far is: \n")
         print(*starting_blanks, sep= ' ')
         guess = str(input("You have " +str(counter)+ " guesses left. Please Enter Your Word Guess: "))
         number_correct_letters = 0
         if len(guess)!=5: 
             print("Hey that doesn't have five letters bro...")
-        else:
-#    if guess not in word_list:
+            #    if guess not in word_list:
 #        print("Come on... that's not a word... Try again")
 #        break 
         #dk how to get this to work
+        else:
+            counter-=1
+            
             if guess == mystery_word:
-                    print(" Congrats! You have guessed the word correctly. It took you "+ str(7-counter)+" tries.")
+                    print(" Congrats! You have guessed the word correctly. It took you "+ str(6-counter)+" tries.")
                     end = False
                     break
+            if counter == 0 :
+                print("You have run out of guesses. The word is " + mystery_word)
+                end = False
+                counter = 6
+                break 
             else:
                 for i in range(5):
                     if guess[i] in mystery_word:
@@ -54,4 +58,5 @@ while end is True :
                     else:
                         print(guess[i]+" is not in the mystery word")
                         i+=1          
-        counter-=1
+        
+
