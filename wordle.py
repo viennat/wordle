@@ -8,12 +8,12 @@ Created on Tue Jan 11 14:33:52 2022
 import random
 word_list = open('/Users/viennathomas/Desktop/Not School/viennawordle/wordlist.txt').readlines()
 mystery_number = random.randrange(5755)
-#mystery_word = word_list[mystery_number]
-mystery_word = 'quark'
+mystery_word = word_list[mystery_number]
+holder_list=word_list.copy()
+#mystery_word = 'quark'
 counter = 6
 starting_blanks= ['_','_','_','_','_']
 end = True
-
 
     
 while end is True : 
@@ -24,13 +24,11 @@ while end is True :
         number_correct_letters = 0
         if len(guess)!=5: 
             print("Hey that doesn't have five letters bro...")
-            #    if guess not in word_list:
-#        print("Come on... that's not a word... Try again")
-#        break 
-        #dk how to get this to work
+        elif guess+'\n' not in word_list:
+            print("Come on... that's not a word... Try again")
         else:
             counter-=1
-            
+          
             if guess == mystery_word:
                     print(" Congrats! You have guessed the word correctly. It took you "+ str(6-counter)+" tries.")
                     end = False
@@ -57,6 +55,6 @@ while end is True :
                             i+=1
                     else:
                         print(guess[i]+" is not in the mystery word")
-                        i+=1          
+                        i+=1                 
         
 
