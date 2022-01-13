@@ -5,50 +5,79 @@ Created on Tue Jan 11 14:33:52 2022
 
 @author: viennathomas
 """
+import os
 import random
-word_list = open('/Users/viennathomas/Desktop/Not School/viennawordle/wordlist.txt').readlines()
-mystery_number = random.randrange(5755)
-#mystery_word = word_list[mystery_number]
-mystery_word = 'quark'
-counter = 6
-starting_blanks= ['_','_','_','_','_']
-end = True
-while end is True : 
-    if counter > 0:
-        print ("\n The word so far is: \n")
-        print(*starting_blanks, sep= ' ')
-        guess = input("You have " +str(counter)+ " guesses left. Please Enter Your Word Guess: ")
-        number_correct_letters = 0
+
+def grid_maker(guesses):
+    grid= []
+    for i in range(guesses):
+        grid.append(['_','_','_','_','_'])
+    return grid
+def print_grid(grid):
+    for grid_line in grid:
+        print(*grid_line, sep= ' ')
+
+def convert(mystery_word):
+    correct_word=[]
+    correct_word[:0]=mystery_word
+    return correct_word
+           
+def game_start():
+    dir = os.path.dirname(__file__)
+    with open(os.path.join(dir, 'wordlist.txt'), 'r') as f:
+        word_list = [word.strip() for word in f.readlines()]
+#    mystery_word = 'stale'
+    mystery_word = random.choice(word_list)
+    game_play(mystery_word, word_list)
+    play_again()
+   
+def game_play(mystery_word,word_list):
+    mystery_word_list = convert(mystery_word)
+    grid = grid_maker(6)
+    print_grid(grid)  
+    counter = 0
+    while counter <6:
+        guess = input("You have " +str(6-counter)+ " guesses left. Please Enter Your Word Guess: ") 
+        if guess == mystery_word:
+            print("\n nice. you won in "+ str(counter+1)+' tries.')
+            return
         if len(guess)!=5: 
             print("Hey that doesn't have five letters bro...")
-        elif guess+'\n' not in word_list:
+        elif guess not in word_list:
             print("Come on... that's not a word... Try again")
+            
+            
         else:
-            counter-=1 
-            if guess == mystery_word:
-                    print(" Congrats! You have guessed the word correctly. It took you "+ str(6-counter)+" tries.")
-                    break
-            if counter == 0 :
-                print("You have run out of guesses. The word is " + mystery_word)
-                end = False
-                counter = 6
-                break 
-            else:
-                for i in range(5):
-                    if guess[i] in mystery_word:
-                       
-                        if guess[i] == mystery_word[i]:
-                            starting_blanks[i] = guess[i]
-                            number_correct_letters+=1
-                            print(guess[i]+" is in the correct position and is in the mystery word" )
-                            i+=1
-                            if number_correct_letters == 5:
-                                print(" Congrats! You have guessed the word correctly. It took you "+ str(6-counter)+" tries.")
-                                break 
-                        else: 
-                            print(guess[i]+" is not in the correct position but is in the mystery word")
-                            i+=1
-                    else:
-                        print(guess[i]+" is not in the mystery word")
-                        i+=1     
+            thing_list = mystery_word_list.copy()
+            for i in range(len(guess)):
+                
+                
+                if guess[i] == mystery_word[i]:
+                    grid[counter][i] = guess[i].upper()
+                    thing_list.remove(guess[i])
+                    print(guess[i]+" is  in the correct position and is in the mystery word.\n")
+                    
+                elif guess[i] in thing_list:
+                    grid[counter][i] = guess[i]
+                    thing_list.remove(guess[i])
+                    print(guess[i]+" is not in the correct position but is in the mystery word.\n")
+                else:
+                    grid[counter][i] = guess[i]
+                    print(guess[i]+ " is not in the mystery word.\n")
+            print_grid(grid)
+            counter += 1
+    print ("\n you suck. the word is " + mystery_word)
+    
+    
+#def colours():
+#
+def play_again():
+    more_game = input('Do you want to play again or are you sick of this game? Y/N? ')
+    if more_game.lower() == 'y':
+        game_start()
+    
+    
+#    
+    
+game_start()
 
